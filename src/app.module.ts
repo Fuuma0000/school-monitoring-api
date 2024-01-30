@@ -4,7 +4,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -13,7 +12,16 @@ import { User } from './users/entities/user.entity';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
-    TypeOrmModule.forRoot({ entities: [User] }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'db2',
+      username: 'user',
+      password: 'password',
+      database: 'database',
+      port: 5432,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
     UsersModule,
   ],
   controllers: [],
